@@ -1,0 +1,140 @@
+/* HEADER HERO */
+.hero {
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+}
+
+/* SECTION CARDS */
+.overview {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 320px;
+    text-align: center;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    margin: 15px 0;
+}
+
+.card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.card .btn:hover {
+    background: #444;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    padding: 10px 20px;
+    flex-shrink: 0;
+}
+
+.navbar .nav-brand {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.navbar .nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.navbar .nav-links a.active {
+    text-decoration: underline;
+}
+
+/* Contenu principal */
+#main-content {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Plateau + Graphe */
+#left-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px; /* espace entre plateau et graphe */
+}
+
+#left-panel canvas {
+    flex-shrink: 0;
+    border: 1px solid black;
+    background: #f9f9f9;
+    margin: 10px;
+}
+
+/* Contrôles */
+#controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-left: 10px;
+    min-width: 200px;
+}
+
+label {
+    margin-bottom: 10px;
+}
+
+input[type=range] {
+    width: 150px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}

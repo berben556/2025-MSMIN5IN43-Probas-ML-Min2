@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand">Game Theory</div>
+    <div class="nav-links">
+        <a href="/index.html">Accueil</a>
+        <a href="/HK/hawk-dove.html">Hawk–Dove</a>
+        <a href="/RPS/rps.html" class="active">Rock–Paper–Scissors</a>
+    </div>
+</nav>
+
+<!-- CONTENU -->
+<div class="page">
+    <h1>Rock – Paper – Scissors</h1>
+
+    <p>
+        Cette page servira à simuler un jeu <strong>Rock–Paper–Scissors</strong>
+        dans un cadre de théorie des jeux évolutionniste.
+    </p>
+
+    <div id="rps-container">
+        <div class="choices">
+            <button onclick="play('ROCK')">🪨 Rock</button>
+            <button onclick="play('PAPER')">📄 Paper</button>
+            <button onclick="play('SCISSORS')">✂️ Scissors</button>
+        </div>
+
+        <div id="result" class="result">
+            Faites un choix pour commencer
+        </div>
+    </div>
+</div>
+
+<script src="/rps.js"></script>
+</body>
+</html>

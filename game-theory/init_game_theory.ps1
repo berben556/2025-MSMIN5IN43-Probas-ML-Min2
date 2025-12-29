@@ -236,7 +236,7 @@ public class GameController {
 <button onclick="step()">Next Day</button>
 <canvas id="board" width="600" height="600"></canvas>
 <canvas id="chart"></canvas>
-<script src="game.js"></script>
+<script src="hawk-dove.js"></script>
 </body>
 </html>
 "@ | Set-Content "$STATIC/game.html"
@@ -275,7 +275,7 @@ function draw(s){
   chart.data.datasets[1].data.push(s.doves);
   chart.update();
 }
-"@ | Set-Content "$STATIC/game.js"
+"@ | Set-Content "$STATIC/hawk-dove.js"
 
 Write-Host "PROJET COMPLET CREE - LANCEZ AVEC mvn spring-boot:run"
 
