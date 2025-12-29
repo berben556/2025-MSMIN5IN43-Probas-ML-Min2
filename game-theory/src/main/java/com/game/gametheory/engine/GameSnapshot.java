@@ -4,7 +4,7 @@ import com.game.gametheory.model.*;
 import java.util.*;
 
 public class GameSnapshot {
-  public int day, hawks, doves, grudges;
+  public int day, hawks, doves, grudges, detectives;
   public List<CreatureDTO> creatures = new ArrayList<>();
 
   public static GameSnapshot from(List<Creature> cs, int day) {
@@ -20,6 +20,7 @@ public class GameSnapshot {
       if (c.getSpecies() == Species.HAWK) g.hawks++;
       else if (c.getSpecies() == Species.DOVE) g.doves++;
       else if (c.getSpecies() == Species.GRUDGE) g.grudges++;
+      else if (c.getSpecies() == Species.DETECTIVE) g.detectives++;
     }
     return g;
   }

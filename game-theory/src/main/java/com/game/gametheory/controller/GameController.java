@@ -20,8 +20,9 @@ public class GameController {
   public void start(
           @RequestParam int hawks,
           @RequestParam int doves,
-          @RequestParam(defaultValue = "0") int grudges) {
-    engine = new GameEngine(hawks, doves, grudges);
+          @RequestParam(defaultValue = "0") int grudges,
+          @RequestParam(defaultValue = "0") int detectives){
+    engine = new GameEngine(hawks, doves, grudges, detectives);
   }
 
   /**

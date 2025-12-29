@@ -7,11 +7,12 @@ public class GameEngine {
   public int day = 0;
   public Board board;
 
-  public GameEngine(int h, int d, int g) {
+  public GameEngine(int h, int d, int g, int det) {
     board = new Board(280);
     for (int i = 0; i < h; i++) board.creatures.add(new Hawk(board.randomPosition()));
     for (int i = 0; i < d; i++) board.creatures.add(new Dove(board.randomPosition()));
     for (int i = 0; i < g; i++) board.creatures.add(new Grudge(board.randomPosition()));
+    for (int i = 0; i < det; i++) board.creatures.add(new Detective(board.randomPosition()));
   }
 
   public GameSnapshot nextDay() {
@@ -36,6 +37,22 @@ public class GameEngine {
         }
       }
 
+      // Gestion Detective
+      if (c instanceof Detective) {
+        Detective det = (Detective) c;
+
+        for (Creature other : board.creatures) {
+          if (other == c) continue;
+
+          boolean otherIsHawk = other.getSpecies() == Species.HAWK
+                  || (other instanceof Grudge && ((Grudge) other).behavesAsHawkAgainst(c));
+
+          det.observe(other, otherIsHawk);
+        }
+
+        det.nextRound();
+      }
+
       // Vérifier survie
       if (c.survives()) {
         next.add(c);
@@ -45,6 +62,7 @@ public class GameEngine {
           if (c.getSpecies() == Species.HAWK) next.add(new Hawk(board.randomPosition()));
           else if (c.getSpecies() == Species.DOVE) next.add(new Dove(board.randomPosition()));
           else if (c.getSpecies() == Species.GRUDGE) next.add(new Grudge(board.randomPosition()));
+          else if (c.getSpecies() == Species.DETECTIVE) next.add(new Detective(board.randomPosition()));
         }
       }
     }

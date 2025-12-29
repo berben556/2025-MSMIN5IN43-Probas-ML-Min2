@@ -4,7 +4,8 @@
 const Species = Object.freeze({
   HAWK: "HAWK",
   DOVE: "DOVE",
-  GRUDGE: "GRUDGE"
+  GRUDGE: "GRUDGE",
+  DETECTIVE: "DETECTIVE"
 });
 
 /*********************************************************
@@ -17,9 +18,11 @@ const chartCanvas = document.getElementById("chart");
 const hawksSlider = document.getElementById("hawksSlider");
 const dovesSlider = document.getElementById("dovesSlider");
 const grudgeSlider = document.getElementById("grudgeSlider");
+const detectiveSlider = document.getElementById("detectiveSlider");
 const hawksVal = document.getElementById("hawksVal");
 const dovesVal = document.getElementById("dovesVal");
 const grudgeVal = document.getElementById("grudgeVal");
+const detectiveVal = document.getElementById("detectiveVal");
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
@@ -35,7 +38,8 @@ const chart = new Chart(chartCanvas, {
     datasets: [
       { label: "Hawks", borderColor: "red", data: [] },
       { label: "Doves", borderColor: "blue", data: [] },
-      { label: "Grudges", borderColor: "gold", data: [] }
+      { label: "Grudges", borderColor: "gold", data: [] },
+      { label: "Detectives", borderColor: "purple", data: [] }
     ]
   },
   options: {
@@ -89,7 +93,12 @@ function createCreature(species, angle) {
     startY: y,
     target: null,
     food: 0,
-    hawksMemory: species === Species.GRUDGE ? new Set() : null
+    hawksMemory:
+        species === Species.GRUDGE || species === Species.DETECTIVE
+            ? new Set()
+            : null,
+    round: species === Species.DETECTIVE ? 0 : null,
+    someoneCheated: species === Species.DETECTIVE ? false : null
   };
 }
 
@@ -133,29 +142,35 @@ function generateFoodPairs() {
   });
 
   const max = foods.length * 2;
-  hawksSlider.max = dovesSlider.max = grudgeSlider.max = max;
+  hawksSlider.max = dovesSlider.max = grudgeSlider.max = detectiveSlider.max = max;
 }
 
 /*********************************************************
  * INITIALISATION
  *********************************************************/
-function initCreatures(h, d, g) {
+function initCreatures(h, d, g, det) {
   creatures = [];
   nextId = 0;
   day = 0;
 
   generateFoodPairs();
 
-  const total = h + d + g;
+  const total = h + d + g + det;
   for (let i = 0; i < total; i++) {
     const angle = (2 * Math.PI * i) / total;
-    let s = i < h ? Species.HAWK : i < h + d ? Species.DOVE : Species.GRUDGE;
+    let s =
+        i < h ? Species.HAWK :
+            i < h + d ? Species.DOVE :
+                i < h + d + g ? Species.GRUDGE :
+                    Species.DETECTIVE;
+
     creatures.push(createCreature(s, angle));
   }
 
   resetChart();
   draw();
 }
+
 
 /*********************************************************
  * DESSIN
@@ -187,7 +202,8 @@ function draw() {
     ctx.arc(c.x, c.y, 8, 0, 2 * Math.PI);
     ctx.fillStyle =
         c.species === Species.HAWK ? "red" :
-            c.species === Species.DOVE ? "blue" : "gold";
+            c.species === Species.DOVE ? "blue" :
+                c.species === Species.GRUDGE ? "gold" : "purple";
     ctx.fill();
   });
 }
@@ -253,7 +269,13 @@ function animateMove(speed = 4) {
 function behavesAsHawk(c, other) {
   if (c.species === Species.HAWK) return true;
   if (c.species === Species.DOVE) return false;
-
+  if (c.species === Species.DETECTIVE) {
+    if (c.round < 4) {
+      return [false, true, false, false][c.round];
+    }
+    if (!c.someoneCheated) return true; // exploitation
+    return other && c.hawksMemory?.has(other.id);
+  }
   // Pour une Grudge, vérifier que le Hawk est vivant avant de considérer qu'il se comporte comme un Hawk
   if (c.species === Species.GRUDGE && other) {
     // Filtrer la mémoire pour ne garder que les Hawks encore présents
@@ -275,6 +297,18 @@ function eatPair(pair) {
     const [a, b] = assigned;
     const ha = behavesAsHawk(a, b);
     const hb = behavesAsHawk(b, a);
+
+    // Detective observe
+    if (a.species === Species.DETECTIVE && hb) {
+      a.someoneCheated = true;
+      a.hawksMemory ??= new Set();
+      a.hawksMemory.add(b.id);
+    }
+    if (b.species === Species.DETECTIVE && ha) {
+      b.someoneCheated = true;
+      b.hawksMemory ??= new Set();
+      b.hawksMemory.add(a.id);
+    }
 
     //repartition de la nourriture
     if (ha && hb) {
@@ -390,6 +424,9 @@ async function stepDay() {
   // Réorganisation finale
   await animateReposition(creatures);
 
+  creatures.forEach(c => {
+    if (c.species === Species.DETECTIVE) c.round++;
+  });
   // Mise à jour du graphe
   updateChart();
 
@@ -413,6 +450,7 @@ function resetChart() {
   chart.data.datasets[0].data = [count(Species.HAWK)];
   chart.data.datasets[1].data = [count(Species.DOVE)];
   chart.data.datasets[2].data = [count(Species.GRUDGE)];
+  chart.data.datasets[3].data = [count(Species.DETECTIVE)];
   chart.update();
 }
 
@@ -421,6 +459,7 @@ function updateChart() {
   chart.data.datasets[0].data.push(count(Species.HAWK));
   chart.data.datasets[1].data.push(count(Species.DOVE));
   chart.data.datasets[2].data.push(count(Species.GRUDGE));
+  chart.data.datasets[3].data.push(count(Species.DETECTIVE));
   chart.update();
 }
 
@@ -431,11 +470,12 @@ function syncSliders() {
   hawksVal.textContent = hawksSlider.value.toString().padStart(2, '0');
   dovesVal.textContent = dovesSlider.value.toString().padStart(2, '0');
   grudgeVal.textContent = grudgeSlider.value.toString().padStart(2, '0');
+  detectiveVal.textContent = detectiveSlider.value.padStart(2,'0');
 
-  initCreatures(+hawksSlider.value, +dovesSlider.value, +grudgeSlider.value);
+  initCreatures(+hawksSlider.value, +dovesSlider.value, +grudgeSlider.value, +detectiveSlider.value);
 }
 
-hawksSlider.oninput = dovesSlider.oninput = grudgeSlider.oninput = syncSliders;
+hawksSlider.oninput = dovesSlider.oninput = grudgeSlider.oninput = detectiveSlider.oninput = syncSliders;
 
 startBtn.onclick = () => loop ??= setInterval(stepDay, 3000);
 stopBtn.onclick = () => { clearInterval(loop); loop = null; };
