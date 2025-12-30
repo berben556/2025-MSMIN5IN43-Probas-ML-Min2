@@ -89,14 +89,17 @@ Ou via Maven :
 - mvn spring-boot:run
 
 Accéder au frontend :
-- http://localhost:8080/game.html
+- Page d'accueil: http://localhost:8080/index.html
+- Simulation Hawks-Dove: http://localhost:8080/HK/hawk-dove.html
+- Simulation Rock-Paper-Scissor: http://localhost:8080/RPS/rps.html
+- Tableaux des gains: http://localhost:8080/rules.html
 
-## Utilisation
+## Simulation Hawks-Dove
 
-Le Frontend affiche :
-- Le plateau: un cercle autour duquel sont placés les créatures (Hawk rouge/Dove bleu)
+La page affiche :
+- Le plateau: un cercle autour duquel sont placés les créatures (Hawk rouge/Dove bleu/Grudge jaune/Detective violet)
 - Un graphique représentant l’évolution des populations
-- Des sliders permettant de changer la répartition des créatures entre les 2 catégories avant de commancer les simulation
+- Des sliders permettant de changer la répartition des créatures entre les catégories avant de commencer la simulation
 - Les boutons
 
 Les boutons :
@@ -122,3 +125,31 @@ Les Grudge et les Detectives agissent de manière alernative:
 - survivent si elles ont eu 1 nourriture
 - on 50% de chance de se reproduire si elles ont eu 1.5 nourriture
 - se reproduisent si elles ont eu 2 nourriture
+
+## Simulation Rock-Paper-Scissor
+
+La page affiche :
+- Le plateau: un cercle autour duquel sont placés les joueurs (Rock rouge/Scissor vert/Paper bleu)
+- Un graphique représentant l’évolution des populations
+- Des cases permettant de changer la répartition des créatures entre les catégories avant de commencer la simulation (la somme étant toujours égale à 36)
+- Les boutons
+
+Les boutons :
+- Start : initialise la simulation
+- Stop : met la simulation en pause à la fin du jour en court
+- Reset : remet la page dans la configuration de départ
+
+# LOGIQUE DE SIMULATION
+
+Chaque jour les joeurs se dirigent aléatoirement vers un point de rencontre:
+- Scissor bas Paper
+- Paper bas Rock
+- Rock bas Scissor
+
+À la fin de la journée les joueurs:
+- restent leur type de départ s'ils ont gagnés
+- deviennent le type du gagnant s'ils ont perdus
+
+## Tableaux des gains
+
+La page "tableaux des gains" affiche les tableaux des gains pour les deux simulations.
