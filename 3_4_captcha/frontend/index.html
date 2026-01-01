@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résolution de Captcha - Deep Learning</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 { color: #333; }
+        .captcha-box {
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        img {
+            max-width: 100%;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .results {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+            text-align: left;
+        }
+        .result-item {
+            padding: 15px;
+            border-radius: 8px;
+            width: 45%;
+        }
+        .real { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .pred { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .label { font-size: 12px; text-transform: uppercase; color: #666; display: block; margin-bottom: 5px;}
+        .value { font-size: 24px; font-weight: bold; font-family: monospace; letter-spacing: 3px;}
+        
+        .custom-section {
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 60%;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Démo Résolution Captcha</h1>
+    <p>Modèle CRNN sur données synthétiques</p>
+
+    <div class="captcha-box" id="captchaContainer">
+        <p style="color:#aaa">Cliquez sur un bouton pour commencer</p>
+    </div>
+
+    <div class="results" id="results" style="visibility: hidden;">
+        <div class="result-item real">
+            <span class="label">Vrai Texte</span>
+            <span class="value" id="realValue">?</span>
+        </div>
+        <div class="result-item pred">
+            <span class="label">Prédiction IA</span>
+            <span class="value" id="predValue">?</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button onclick="runTestRandom()">Test Aléatoire (Validation)</button>
+    </div>
+
+    <div class="custom-section">
+        <h3>Tester votre propre texte</h3>
+        <input type="text" id="customText" placeholder="Ex: ABCD" maxlength="6">
+        <button onclick="runTestCustom()">Générer & Tester</button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:8000";
+
+    async function runTestRandom() {
+        resetUI();
+        try {
+            // 1. Récupérer l'image aléatoire
+            const response = await fetch(`${API_URL}/test-sample?t=${new Date().getTime()}`);
+            if (!response.ok) throw new Error("Erreur serveur");
+            
+            const trueLabel = response.headers.get("X-True-Label");
+            const blob = await response.blob();
+            
+            displayImage(blob);
+            displayResult(trueLabel, "Chargement...");
+
+            // 2. Faire la prédiction
+            predictImage(blob);
+
+        } catch (error) {
+            console.error(error);
+            alert("Erreur lors du test aléatoire");
+        }
+    }
+
+    async function runTestCustom() {
+        const text = document.getElementById('customText').value.toUpperCase();
+        if (!text) return alert("Entrez du texte !");
+
+        resetUI();
+        try {
+            const formData = new FormData();
+            formData.append("text", text);
+
+            const response = await fetch(`${API_URL}/generate-custom`, {
+                method: "POST",
+                body: formData
+            });
+            
+            if (!response.ok) throw new Error("Erreur génération");
+
+            const trueLabel = response.headers.get("X-True-Label");
+            const prediction = response.headers.get("X-Prediction"); // Le back renvoie déjà la pred ici !
+            const blob = await response.blob();
+
+            displayImage(blob);
+            // Ici le back a déjà fait la prédiction lors de la génération
+            displayResult(trueLabel, prediction ? prediction : "(Vide)");
+
+        } catch (error) {
+            console.error(error);
+            alert("Erreur lors du test personnalisé");
+        }
+    }
+
+    async function predictImage(blob) {
+        const formData = new FormData();
+        formData.append("file", blob, "captcha.png");
+
+        try {
+            const predResponse = await fetch(`${API_URL}/predict`, {
+                method: "POST",
+                body: formData
+            });
+            const predData = await predResponse.json();
+            
+            const predSpan = document.getElementById('predValue');
+            predSpan.textContent = predData.prediction ? predData.prediction : "(Vide)";
+            predSpan.style.color = predData.prediction ? "#1565c0" : "#999";
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function resetUI() {
+        document.getElementById('captchaContainer').innerHTML = '<p>Chargement...</p>';
+        document.getElementById('results').style.visibility = 'hidden';
+        document.getElementById('realValue').textContent = '?';
+        document.getElementById('predValue').textContent = '?';
+    }
+
+    function displayImage(blob) {
+        const imageUrl = URL.createObjectURL(blob);
+        document.getElementById('captchaContainer').innerHTML = `<img src="${imageUrl}" alt="Captcha">`;
+    }
+
+    function displayResult(real, pred) {
+        document.getElementById('realValue').textContent = real;
+        document.getElementById('predValue').textContent = pred;
+        document.getElementById('results').style.visibility = 'visible';
+    }
+</script>
+
+</body>
+</html>
