@@ -12,7 +12,7 @@ CSV_FILE = os.path.join(DATA_ROOT, "dataset.csv")
 ALPHABET = string.ascii_uppercase
 WIDTH = 220
 HEIGHT = 64
-NUM_IMAGES = 8000  # 5000 images simples
+NUM_IMAGES = 12000  # 5000 images simples
 
 # Captchas object Configuration
 captcha: ImageCaptcha = ImageCaptcha(
@@ -79,30 +79,3 @@ def generate_dataset():
 
 if __name__ == "__main__":
     generate_dataset()
-
-
-"""
-def generate_image(text):
-    image = Image.new("RGB", (WIDTH, HEIGHT), color=(255, 255, 255))
-    draw = ImageDraw.Draw(image)
-    try:
-        font = ImageFont.truetype("Arial.ttf", 36)
-    except:
-        font = ImageFont.load_default()
-
-    bbox = draw.textbbox((0, 0), text, font=font)
-    text_w = bbox[2] - bbox[0]
-    text_h = bbox[3] - bbox[1]
-    x = (WIDTH - text_w) / 2
-    y = (HEIGHT - text_h) / 2
-
-    draw.text((x, y), text, font=font, fill=(0, 0, 0))
-
-    # Bruit léger
-    for _ in range(100):
-        draw.point(
-            (random.randint(0, WIDTH), random.randint(0, HEIGHT)),
-            fill=(100, 100, 100),
-        )
-    return image
-"""

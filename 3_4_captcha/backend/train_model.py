@@ -46,7 +46,7 @@ IMG_WIDTH = 200
 IMG_HEIGHT = 64
 BATCH_SIZE = 64
 LEARNING_RATE = 0.001
-EPOCHS = 10
+EPOCHS = 15
 ALPHABET = string.ascii_uppercase
 
 # Mapping caractères <-> index
