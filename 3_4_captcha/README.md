@@ -70,4 +70,8 @@ Il suffit d'ouvrir le fichier `frontend/index.html` dans votre navigateur web (d
 
 ## Auteurs
 
+Louis Savignac
+Fantin Ellena-Mehl
+Hugo Bordier
+
 Projet réalisé dans le cadre du cours IA Probabiliste & Machine Learning (2025).
