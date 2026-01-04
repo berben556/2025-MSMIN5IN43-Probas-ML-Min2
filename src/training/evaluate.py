@@ -1,6 +1,9 @@
 from sklearn.metrics import classification_report, confusion_matrix
 import torch
 from torchvision import transforms
+import sys
+sys.path.append(".")
+
 from src.models.resnet import get_model
 from src.datasets.mri_dataset import MRIDataset
 from torch.utils.data import DataLoader
@@ -27,7 +30,7 @@ with torch.no_grad():
         all_preds.extend(preds.numpy())
         all_labels.extend(labels.numpy())
 
-classes = ["Glioma", "Meningioma", "Pituitary", "No Tumor"]
+classes = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
 print("Classification report:")
 print(classification_report(all_labels, all_preds, target_names=classes))
 

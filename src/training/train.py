@@ -2,6 +2,8 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch import nn, optim
+import sys
+sys.path.append(".")
 
 from src.datasets.mri_dataset import MRIDataset
 from src.models.resnet import get_model
@@ -9,6 +11,7 @@ from src.models.resnet import get_model
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 transform = transforms.Compose([
+    transforms.Resize((224, 224)),
     transforms.ToTensor()
 ])
 
