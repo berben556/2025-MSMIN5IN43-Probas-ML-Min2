@@ -1,6 +1,6 @@
 # Bayesian Sports Analytics
 
-## 📋 Description du Projet
+## Description du Projet
 
 Ce projet vise à **prédire les résultats sportifs mieux que les bookmakers** en utilisant un modèle bayésien hiérarchique. Le modèle estime la force d'attaque et de défense de chaque équipe dans un championnat de football, tout en prenant en compte l'avantage du terrain (home advantage).
 
@@ -16,7 +16,7 @@ Ce projet vise à **prédire les résultats sportifs mieux que les bookmakers** 
 
 ---
 
-## 🛠️ Installation des Dépendances
+## Installation des Dépendances
 
 ### Prérequis
 - Python 3.8+
@@ -47,7 +47,7 @@ python -m cmdstanpy.install_cmdstan
 
 ---
 
-## 📂 Structure du Projet
+## Structure du Projet
 
 ```
 1.4-Bayesian-Sports-Analytics/
@@ -64,13 +64,45 @@ python -m cmdstanpy.install_cmdstan
 │   ├── 03_analysis.py          # Analyse des résultats
 │   ├── 04_prediction.py        # Prédiction de matchs
 │   └── 05_vs_bookmakers.py     # Comparaison avec bookmakers
-└── stan/
-    └── football_model.stan     # Modèle bayésien hiérarchique
+├── stan/
+│   └── football_model.stan     # Modèle bayésien hiérarchique
+└── visual/                     # Interface graphique et démonstration
+    ├── APP_README.md           # Instructions pour lancer la démo
+    ├── Présentation-Bay...     # Présentation (slides)
+    ├── app.py                  # Application Streamlit interactive
+    └── tmp/                    # Fichiers temporaires générés par l'app
 ```
 
 ---
 
+## Démonstration Interactive
+
+Une **interface graphique Streamlit** est disponible pour démontrer le projet de manière interactive.
+
+### Lancement de la Démo
+
+```bash
+# Depuis le dossier visual/
+cd visual
+streamlit run app.py
+```
+
+L'application propose un **workflow complet en 5 étapes** :
+1. **Sélection des données** (championnat, saisons)
+2. **Préparation des données** (mapping, statistiques)
+3. **Entraînement du modèle** (configuration MCMC, diagnostics)
+4. **Analyse des résultats** (classements, visualisations)
+5. **Prédictions** (simulation de matchs, comparaison bookmakers)
+
+**Voir `visual/APP_README.md`** pour les instructions détaillées de la démonstration.
+
+---
+
 ## Guide d'Utilisation
+
+**Pour une utilisation interactive**, utilisez la démonstration Streamlit dans `visual/` (voir section précédente)
+
+### Utilisation en Ligne de Commande
 
 ### Étape 0 : Récupérer les Données (Optionnel)
 
@@ -315,7 +347,6 @@ Vérifiez toujours :
 
 ### Validation
 - Comparez les prédictions avec les résultats réels (saison suivante)
-- Calculez le **Brier Score** ou le **Log Loss**
 
 ---
 
