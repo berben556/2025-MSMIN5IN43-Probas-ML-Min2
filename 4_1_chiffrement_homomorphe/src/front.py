@@ -131,7 +131,7 @@ def predict(
         "evaluation_keys_b64": base64.b64encode(eval_keys).decode("ascii"),
     }
 
-    print(f"encrypted data sent to the backend in the payload : {payload}")
+    print(f"\n ----  REQUEST ENCRYPTED PAYLOAD ---  \n{payload}\n ----")
 
     # 4) Call blind server
     t1 = time.perf_counter()
@@ -140,6 +140,7 @@ def predict(
     r.raise_for_status()
 
     encrypted_result = base64.b64decode(r.json()["encrypted_result_b64"])
+    print(f"\n ----  RESPONSE ENCRYPTED RESULT ---  \n{encrypted_result}\n ----")
 
     # 5) Decrypt locally
     t2 = time.perf_counter()
