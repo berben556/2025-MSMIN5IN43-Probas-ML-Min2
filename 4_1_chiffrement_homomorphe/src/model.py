@@ -7,7 +7,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 from sklearn.compose import ColumnTransformer
-from sklearn.metrics import accuracy_score, roc_auc_score
+from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
@@ -95,6 +95,11 @@ def main():
     auc = roc_auc_score(y_test, proba_clear)
     acc = accuracy_score(y_test, (proba_clear >= 0.5).astype(int))
 
+    y_pred = (proba_clear >= 0.5).astype(int)
+    cm = confusion_matrix(y_test, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+    print(f"Confusion Matrix : {cm}")
+
     print(f"[OK] Clear metrics: roc_auc_score={auc:.3f} accuracy_score={acc:.3f}")
     print(f"[OK] Train time={train_time:.3f}s | Clear inference time={infer_clear_time:.3f}s")
 
@@ -122,6 +127,12 @@ def main():
         "num_cols": num_cols,
         "n_bits": 8,
         "metrics_clear": {"auc": float(auc), "acc": float(acc)},
+        "confusion_matrix": {
+            "tn": int(tn),
+            "fp": int(fp),
+            "fn": int(fn),
+            "tp": int(tp),
+        },
         "timings": {"train_s": train_time, "compile_s": compile_time, "infer_clear_s": infer_clear_time},
     }
     (artifacts_dir / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
