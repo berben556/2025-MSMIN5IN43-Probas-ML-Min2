@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hawk-Dove Simulation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">Game Theory</div>
+    <div class="nav-links">
+        <a href="/accueil.html">Accueil</a>
+        <a href="/HK/hawk-dove.html" class="active">Hawk–Dove</a>
+        <a href="/RPS/rps.html">Rock–Paper–Scissors</a>
+        <a href="/gains.html">Tableaux des gains</a>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div id="main-content">
+    <!-- Plateau + Graphe -->
+    <div id="left-panel">
+        <canvas id="board" width="600" height="600"></canvas>
+        <canvas id="chart" width="400" height="600"></canvas>
+    </div>
+
+    <!-- Contrôles -->
+    <div id="controls">
+        <h2>Simulation Controls</h2>
+        <label>Hawks:
+            <span id="hawksVal">10</span>
+            <input type="range" id="hawksSlider" min="0" max="50" value="10">
+        </label>
+        <label>Doves:
+            <span id="dovesVal">10</span>
+            <input type="range" id="dovesSlider" min="0" max="50" value="10">
+        </label>
+        <label>Grudges:
+            <span id="grudgeVal">05</span>
+            <input type="range" id="grudgeSlider" min="0" max="50" value="10">
+        </label>
+        <label>Detectives:
+            <span id="detectiveVal">05</span>
+            <input type="range" id="detectiveSlider" min="0" max="50" value="10">
+        </label>
+        <button id="startBtn">Start</button>
+        <button id="stopBtn">Stop</button>
+        <button id="resetBtn">Reset</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="hawk-dove.js"></script>
+</body>
+</html>

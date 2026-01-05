@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil – Game Theory</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand">Game Theory</div>
+    <div class="nav-links">
+        <a href="/accueil.html" class="active">Accueil</a>
+        <a href="/HK/hawk-dove.html">Hawk–Dove</a>
+        <a href="/RPS/rps.html">Rock–Paper–Scissors</a>
+        <a href="/gains.html">Tableaux des gains</a>
+    </div>
+</nav>
+
+<!-- HEADER -->
+<header class="hero">
+    <h1>Bienvenue sur Game Theory</h1>
+    <p>Explorez la théorie des jeux évolutionniste à travers des simulations interactives.</p>
+</header>
+
+<!-- CONTENU PRINCIPAL -->
+<main class="page">
+    <section class="overview">
+        <div class="card">
+            <h2>🦅 Hawk–Dove</h2>
+            <canvas id="hawkDoveChart" width="300" height="200"></canvas>
+            <p>Étudiez la compétition et la coexistence entre deux stratégies.</p>
+            <a href="/HK/hawk-dove.html" class="btn">Voir la simulation</a>
+        </div>
+
+        <div class="card">
+            <h2>✊✋✌ Rock–Paper–Scissors</h2>
+            <canvas id="rpsChart" width="300" height="200"></canvas>
+            <p>Découvrez la dynamique cyclique des stratégies dans un jeu simple.</p>
+            <a href="/RPS/rps.html" class="btn">Voir la simulation</a>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Graphique Hawk-Dove
+    const ctx1 = document.getElementById('hawkDoveChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5,6,7],
+            datasets: [
+                { label: 'Hawks', data: [10,12,11,13,12,14,13], borderColor: 'red', fill: false },
+                { label: 'Doves', data: [10,9,10,8,9,7,8], borderColor: 'blue', fill: false },
+                { label: 'Grudges', data: [5,5,6,5,6,5,4], borderColor: 'gold', fill: false } ,// Ajout en jaune
+                { label: 'Detectives', data: [3,4,4,5,6,6,7], borderColor: 'purple', fill: false }
+
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: { title: { display: true, text: 'Jour' } },
+                y: { title: { display: true, text: 'Population' } }
+            }
+        }
+    });
+
+    // Graphique Rock-Paper-Scissors
+    const ctx2 = document.getElementById('rpsChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5,6,7],
+            datasets: [
+                { label: 'Rock', data: [5,6,5,7,6,5,6], borderColor: 'red', fill: false },      // <-- rouge
+                { label: 'Paper', data: [5,4,6,5,5,6,5], borderColor: 'blue', fill: false },    // <-- bleu
+                { label: 'Scissors', data: [5,5,5,4,5,5,5], borderColor: 'green', fill: false } // <-- vert
+            ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'top' } } }
+    });
+</script>
+
+</body>
+</html>

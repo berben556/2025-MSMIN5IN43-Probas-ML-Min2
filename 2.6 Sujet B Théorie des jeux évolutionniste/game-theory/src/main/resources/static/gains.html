@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau des Gains – Game Theory</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand">Game Theory</div>
+    <div class="nav-links">
+        <a href="/accueil.html">Accueil</a>
+        <a href="/HK/hawk-dove.html">Hawk–Dove</a>
+        <a href="/RPS/rps.html">Rock–Paper–Scissors</a>
+        <a href="/gains.html" class="active">Tableaux des gains</a>
+    </div>
+</nav>
+
+<!--HEADER -->
+<header class="hero" style="padding: 30px 20px;">
+    <h1>Tableau des gains</h1>
+</header>
+
+<!-- CONTENU PRINCIPAL -->
+<main id="main-content">
+    <div class="overview">
+        <!-- Tableau des gains Hawks-Dove -->
+        <div class="card full-width">
+            <h2>Hawks-Dove-Grudge-Detective</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th style="color: blue;">Dove</th>
+                    <th style="color: red;">Hawk</th>
+                    <th style="color: gold;">Grudge</th>
+                    <th style="color: purple;">Detective</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th style="color: blue;">Dove</th>
+                    <td>1, 1</td>
+                    <td>0.5, 1.5</td>
+                    <td>1, 1</td>
+                    <td>1ère rencontre 1, 1<br>2ᵉ rencontre 0.5, 1.5</td>
+                </tr>
+                <tr>
+                    <th style="color: red;">Hawk</th>
+                    <td>0.5, 1.5</td>
+                    <td>0, 0</td>
+                    <td>1ère rencontre 0.5, 1.5<br>2ᵉ rencontre 0, 0</td>
+                    <td>0.5, 1.5</td>
+                </tr>
+                <tr>
+                    <th style="color: gold;">Grudge</th>
+                    <td>1, 1</td>
+                    <td>1ère rencontre 0.5, 1.5<br>2ᵉ rencontre 0, 0</td>
+                    <td>1, 1</td>
+                    <td>1ère rencontre 1, 1<br>2ᵉ rencontre 0.5, 1.5<br>3ᵉ rencontre 0, 0</td>
+                </tr>
+                <tr>
+                    <th style="color: purple;">Detective</th>
+                    <td>1ère rencontre 1, 1<br>2ᵉ rencontre 1.5, 0.5</td>
+                    <td>0.5, 1.5</td>
+                    <td>1ère rencontre 1, 1<br>2ᵉ rencontre 1.5, 0.5<br>3ᵉ rencontre 0, 0</td>
+                    <td>1ère rencontre 1, 1<br>2ᵉ rencontre 0, 0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tableau des gains Rock-Paper-Scissors -->
+        <div class="card full-width" style="margin-top: 20px;">
+            <h2>Rock–Paper–Scissors</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th style="color: red;">Rock</th>
+                    <th style="color: blue;">Paper</th>
+                    <th style="color: green;">Scissors</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th style="color: red;">Rock</th>
+                    <td>0, 0</td>
+                    <td>0, 1</td>
+                    <td>1, 0</td>
+                </tr>
+                <tr>
+                    <th style="color: blue;">Paper</th>
+                    <td>1, 0</td>
+                    <td>0, 0</td>
+                    <td>0, 1</td>
+                </tr>
+                <tr>
+                    <th style="color: green;">Scissors</th>
+                    <td>0, 1</td>
+                    <td>1, 0</td>
+                    <td>0, 0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
