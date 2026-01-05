@@ -107,7 +107,56 @@ tqdm
 
 ---
 
-## 4. Usage
+## 4. Préparation des données
+
+### 4.1 Traitement des images (Preprocessing)
+
+```bash
+python src/preprocess.py
+```
+
+Cette commande traite les images brutes du dossier `data/raw/` et les sauvegarde dans `data/processed/` avec un redimensionnement à 224x224 pixels pour l'entraînement du modèle.
+
+---
+
+## 5. Entraînement du modèle
+
+### 5.1 Lancer l'entraînement
+
+```bash
+python src/training/train.py
+```
+
+- Utilise ResNet18 pré-entraîné sur ImageNet
+- Entraîne sur les données de `data/processed/train/`
+- Sauvegarde le modèle entraîné dans `experiments/model.pth`
+- Durée : environ 5-10 minutes selon le matériel
+
+### 5.2 Paramètres d'entraînement
+
+- Epochs : 5
+- Batch size : 16
+- Learning rate : 1e-4
+- Optimiseur : Adam
+- Loss : CrossEntropyLoss
+
+---
+
+## 6. Évaluation du modèle
+
+### 6.1 Lancer l'évaluation
+
+```bash
+python src/training/evaluate.py
+```
+
+- Évalue le modèle sur les données de test `data/processed/test/`
+- Affiche le rapport de classification et la matrice de confusion
+- Métriques : précision, rappel, F1-score par classe
+
+---
+
+## 7. Usage
 
 ### 4.1 Exploration du dataset
 
@@ -130,37 +179,50 @@ Affiche un graphique de distribution pour identifier les déséquilibres.
 ```bash
 python notebooks/03_gradcam_demo.ipynb
 ```
-Charge le modèle (ResNet18) et adapte la dernière couche à 2 classes.
-Prépare l’image et génère le Grad-CAM.
-Superpose la carte de chaleur sur l’image originale pour visualiser les zones importantes pour la décision du modèle.
+Charge le modèle (ResNet18) et adapte la dernière couche à 4 classes.
+Prépare l'image et génère le Grad-CAM.
+Superpose la carte de chaleur sur l'image originale pour visualiser les zones importantes pour la décision du modèle.
 
----
-
-## 5. Résulatats attendus
-
-Exploration dataset : affichage de 8 images aléatoires avec leur label.
-Analyse des données : graphique barre avec le nombre d’images par classe (tumor / no_tumor).
-Grad-CAM : image IRM originale avec superposition d’une heatmap indiquant les zones influençant la décision du modèle.
-
----
-
-## 6. Bonnes pratiques
-
-Toujours exécuter le pipeline dans l’ordre : exploration → analyse → Grad-CAM.
-Vérifier les dimensions des images avant le passage au modèle (512x512 recommandé).
-Sauvegarder les cartes Grad-CAM pour interprétation médicale.
-
----
-
-## 7. Excécution
+### 7.4 Interface utilisateur (Front-end)
 
 ```bash
 python -m streamlit run app.py
 ```
-Affichage du front avec streamlite, 3 boutons permettant chaqu'un d'afficher l'image associée à chaque notebook :
-- Dataset Visualization
-- Analysis Visualization
-- Grad-CAM Result
+
+Lance l'application web Streamlit avec deux onglets :
+
+- **Notebooks** : Exécution des notebooks d'exploration, analyse et Grad-CAM
+- **Test du modèle** : Upload d'une image IRM pour prédiction en temps réel
+  - Affiche la classe prédite et les probabilités pour chaque classe
+  - Génère et affiche la carte Grad-CAM pour expliquer la décision du modèle
+
+---
+
+## 8. Résultats attendus
+
+- **Exploration dataset** : Affichage de 8 images IRM aléatoires avec leurs labels (Glioma, Meningioma, Pituitary, No Tumor).
+- **Analyse des données** : Graphique en barres montrant la distribution des images par classe pour vérifier l'équilibre du dataset.
+- **Grad-CAM** : Image IRM originale avec superposition d'une heatmap indiquant les zones influençant la décision du modèle pour chaque classe.
+- **Test du modèle** : Possibilité d'uploader une image IRM test pour classification en temps réel avec affichage des probabilités par classe et génération automatique de la carte Grad-CAM pour expliquer la prédiction.
+
+---
+
+## 9. Bonnes pratiques
+
+Toujours exécuter le pipeline dans l'ordre : preprocessing → entraînement → évaluation → test.
+Vérifier les dimensions des images avant le passage au modèle (224x224 pour ResNet).
+Sauvegarder les cartes Grad-CAM pour interprétation médicale.
+
+---
+
+## 10. Exécution
+
+```bash
+python -m streamlit run app.py
+```
+Affichage du front avec Streamlit, 2 onglets permettant :
+- Exécution des notebooks
+- Test du modèle avec Grad-CAM intégré
 
 ## Auteurs
 CARLINO Chiara, FINET Lucille, PAOLANTONI Jules
